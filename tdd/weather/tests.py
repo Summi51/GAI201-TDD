@@ -5,12 +5,12 @@ import json
 class WeatherViewTest(TestCase):
     def test_valid_city(self):
         response = self.client.get(
-            reverse("get-weather", kwargs={"city": "San Francisco"})
+            reverse("get-weather", kwargs={"city": "USA"})
         )
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(
             str(response.content, encoding="utf8"),
-            {"temperature": 14, "weather": "Cloudy"},
+            {"temperature": 44, "weather": "Cloudy"},
         )
     def test_invalid_city(self):
         response = self.client.get(
@@ -18,7 +18,7 @@ class WeatherViewTest(TestCase):
         )
         self.assertEqual(response.status_code, 404)
     def test_create_weather_data(self):
-        data = {"city": "Chicago", "temperature": 18, "weather": "Cloudy"}
+        data = {"city": "Zapan", "temperature": 22, "weather": "Sunny"}
         response = self.client.post(
             reverse("create-weather"),
             data=json.dumps(data),
@@ -30,7 +30,7 @@ class WeatherViewTest(TestCase):
     def test_update_weather_data(self):
         updated_data = {"temperature": 25, "weather": "Sunny"}
         response = self.client.put(
-            reverse("update-weather", kwargs={"city": "San Francisco"}),
+            reverse("update-weather", kwargs={"city": "USA"}),
             data=json.dumps(updated_data),
             content_type="application/json",
         )
@@ -38,7 +38,7 @@ class WeatherViewTest(TestCase):
 
         # Fetch the updated weather data from the server to compare
         updated_response = self.client.get(
-            reverse("get-weather", kwargs={"city": "San Francisco"})
+            reverse("get-weather", kwargs={"city": "USA"})
         )
         self.assertJSONEqual(
             str(updated_response.content, encoding="utf8"), updated_data
@@ -46,6 +46,6 @@ class WeatherViewTest(TestCase):
 
     def test_delete_weather_data(self):
         response = self.client.delete(
-            reverse("delete-weather", kwargs={"city": "San Francisco"})
+            reverse("delete-weather", kwargs={"city": "USA"})
         )
         self.assertEqual(response.status_code, 204)
